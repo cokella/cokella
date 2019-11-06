@@ -1,0 +1,253 @@
+/* 清除浏览器默认样式 */
+*{
+  padding: 0;
+  margin: 0;
+}
+.show{
+  background: rgba(92, 89, 88);
+  width: 230px;
+  height: 79px;
+}
+/* 左上角的三个圆点 */
+.show-left div{
+  float: left;
+  margin-left: 8px;
+  margin-top: 5px;
+}
+.show-left div:nth-child(1){
+  width: 12px;
+  height: 12px;
+  background: red;
+  border-radius: 50%;  
+}
+.show-left div:nth-child(2){
+  width: 12px;
+  height: 12px;
+  background: yellow;
+  border-radius: 50%;
+}
+.show-left div:nth-child(3){
+  width: 12px;
+  height: 12px;
+  background:green;
+  border-radius: 50%;
+}
+
+/* 右边的输入及输出显示 */
+.show-right{ 
+  margin-left: 80px;
+  margin-right: 15px;
+}
+.txt{
+  display: block;
+  height: 79px;
+  width: 140px;
+  background: rgba(92, 89, 88);
+  border-style:none;
+  color: aliceblue;
+  font-size:30px;
+  text-align: right;
+  margin-left: 10px;
+  font-family: "PingFang SC";
+
+}
+/* 按钮的样式 */
+.tab{
+  /* 父容器设置flex布局方式 */
+  width: 230px;
+  height: 240px;
+  /* margin-top:30px; */
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.tab input{
+  width:57.5px;
+  height:48px;
+  background: rgba(130, 130, 127);
+  outline: none;
+  border-right:0.5px solid rgba(92, 89, 88);
+  border-bottom:0.5px solid  rgba(92, 89, 88);
+  box-sizing: border-box;
+  font-size:20px;
+  color: aliceblue;
+  font-family: lither;
+  cursor: pointer;
+  border-radius: 0;
+}
+/* 选取前三个按钮 */
+.tab input:nth-child(-n+3){
+  width:57.5px;
+  height:48px;
+  background-color: rgba(108,104,104);
+  font-size: 18px;
+}
+/* 选取0 定义样式 */
+.tab input:nth-child(17){
+  /* 定义放大比例 */
+  flex-grow: 1; 
+}
+.tab input:nth-child(4n){
+  background-color: orange;
+}
+.tab :last-child{
+  background-color:orange; 
+}
+
+/* 加载loading样式 */
+.loading{
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  left: 270px;
+  top: 390px;
+  display: none
+}
+.loading span{
+  display: inline-block;
+  width: 30px;
+  height: 10px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: black;
+  position: absolute;
+  animation: load 1.04s ease infinite;
+}
+@keyframes load{
+  0%{
+      opacity: 1;
+  }
+  100%{
+      opacity: 0.2;
+  }
+}
+.loading span:nth-child(1){
+  left: 0;
+  top: 50%;
+  margin-top:-5px;
+  animation-delay:0.13s;
+}
+.loading span:nth-child(2){
+  left: 10px;
+  top: 20px;
+  transform: rotate(45deg);
+  animation-delay:0.26s;
+}
+.loading span:nth-child(3){
+  left: 50%;
+  top: 10px;
+  margin-left: -15px;
+  transform: rotate(90deg);
+   animation-delay:0.39s;
+}
+.loading span:nth-child(4){
+  top: 20px;
+  right:10px;
+  transform: rotate(135deg);
+  animation-delay:0.52s;
+}
+.loading span:nth-child(5){
+  right: 0;
+  top: 50%;
+  margin-top:-5px;
+  transform: rotate(180deg);
+  animation-delay:0.65s;
+}
+.loading span:nth-child(6){
+  right: 10px;
+  bottom:20px;
+  transform: rotate(225deg);
+  animation-delay:0.78s;
+}
+.loading span:nth-child(7){
+  bottom: 10px;
+  left: 50%;
+  margin-left: -15px;
+  transform: rotate(270deg);
+  animation-delay:0.91s;
+}
+.loading span:nth-child(8){
+  bottom: 20px;
+  left: 10px;
+  transform: rotate(315deg);
+  animation-delay:1.04s;
+}
+
+
+
+.container {
+  margin: 0 auto;
+  width: 1800px;
+  height: 800px;
+  position: relative;
+  margin-top: 200px;
+}
+
+header {
+  width: 100%;
+  height: 25px;
+  background-color: #CCFF99;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.title{
+  margin-left: 500px;
+}
+.name{
+  margin-left: 1300px;
+}
+.exit{
+  float: right;
+}
+.nav nav-tabs {
+  list-style: none;
+  margin-left: -50px;
+}
+
+.nav nav-tabs li {
+  margin-left: 20px;
+  display: inline;
+}
+
+.nav nav-tabs li a {
+  text-decoration: none;
+  font: black;
+  color: black;
+}
+
+#profile {
+  margin-top: 30px;
+}
+
+#profile .form-control {
+  max-width: 100px;
+  margin-left: 10px;
+  display: inline;
+}
+
+#profile #start, #profile #end {
+  height: 35px;
+}
+
+#profile .button {
+  background: #00BFFF;
+  color: white;
+  border-style: none;
+  border-radius: 2px;
+  margin-left: 10px;
+}
+
+.show {
+  list-style: none;
+  margin-top: 15px;
+}
+
+.show li {
+  display: inline;
+  margin-left: 10px;
+}
+
+.page {
+  float: right;
+}
