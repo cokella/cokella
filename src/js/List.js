@@ -28,6 +28,7 @@ class List extends React.Component{
        }
     }
     
+    //改变当前最大页
     maxChange(){
         this.setState({
             max: document.getElementById("max").value
