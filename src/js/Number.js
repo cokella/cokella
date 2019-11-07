@@ -90,9 +90,13 @@ class Number extends React.Component{
          },1500);
              setTimeout(()=>{
              //loading结束后同时显示结果
+            Math.formatFloat = function(f,digit) { 
+            var m = Math.pow(10,digit); 
+            return parseInt(f*m)/m;
+         }
              this.state.res[this.state.res.length] = txt.value;
              //eval计算表达式的值;
-             txt.value = eval(this.state.res.join(""));
+             txt.value = Math.formatFloat(eval(this.state.res.join("")),9);
              this.state.res=[];
          },1500)
        } 
