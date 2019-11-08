@@ -1,46 +1,64 @@
 import React from 'react';
 
-function Maxshow(){
-    return(
-    <select className="form-control" id="max">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option defaultValue="3" value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>  
-    </select>
-    )
-}
-
+ /**
+  * le
+  * 2019/11/6
+  * 主组件List
+  */
 class List extends React.Component{
     constructor(props){
        super(props);
-       this.handleFind = this.handleFind.bind(this);
-       this.handleReturn = this.handleReturn.bind(this);
-       this.handleForward = this.handleForward.bind(this);
        this.state = {
-        max:0,
-        allPage:0,
-        currentPage:0,
-        strc: ""
+        max:0,   //当前最大页
+        allPage:0,   //总页数
+        currentPage:0,  //当前页
+        startTime: '', // 起始日期
+        endTime: '',  // 结束日期
+        strc: '',  //表格内容
        }
     }
     
-    //改变当前最大页
-    maxChange(){
+    /**
+     * le
+     * 2019/11/6
+     * 改变最大页
+     */
+    maxChange = (e) => {
+        let maxNow = e.target.value;
         this.setState({
-            max: document.getElementById("max").value
+            max: maxNow
         })
     }
 
+    /**
+     * le
+     * 2019/11/6
+     * 修改起始和结束日期
+     */
+    onchanges = (e) => {
+        let date = e.target.value;
+        this.setState({
+            startTime :  date
+        })
+    }
+    onchangee = (e) => {
+        let date = e.target.value;
+        this.setState({
+            endTime :  date
+        })
+    }
+
+    /**
+     * le
+     * 2019/11/6
+     * 分页数据请求
+     */
     getRes(){
-        const allPage = this.state.allPage;
-        const currentPage = this.state.currentPage;
+        let { strc,currentPage,max } = this.state;
+        var that = this;
         fetch("http://127.0.0.1:5500/api.json").then(res=>res.json()).then(data=>{
             const dataArr = data.content;
-            this.state.strc=`<tr style="background:#D3D3D3">
+            that.strc=`<tr style="background:#D3D3D3">
                      <td style="width:190px;">日期</td>
                      <td style="width:150px;">付费人数</td>
                      <td style="width:100px;">免费人数</td>
@@ -62,12 +80,12 @@ class List extends React.Component{
             //用时间戳返回毫秒数判断
             const dataArr = data.content;
             //判断总页数
-            this.allPage = Math.ceil(dataArr.length/this.state.max);
+            this.allPage = Math.ceil(dataArr.length/max);
             //显示当前页和总页数
-            document.getElementById("currentPage").innerHTML=currentPage+1;
-            document.getElementById("allPage").innerHTML=allPage;
-            if(i>=currentPage*this.state.max && i<(currentPage+1)*this.state.max){
-            this.state.strc+=`<tr style="border:1px solid grey">
+            that.refs.current.innerHTML=currentPage+1;
+            that.refs.all.innerHTML=this.state.allPage;
+            if(i>=currentPage*max && i<(currentPage+1)*max){
+            that.strc+=`<tr style="border:1px solid grey">
                      <td style="color:#2399ed">${item.day}</td>
                      <td>${item.payorder}</td>
                      <td>${item.freeorder}</td>
@@ -87,37 +105,53 @@ class List extends React.Component{
                    </tr>`;
             }
          }) 
-            document.getElementById('show').innerHTML=this.state.strc  
+            that.refs.show.innerHTML=that.strc  
         })
     }
 
-    //向前翻页事件
-    handleReturn(){
+    /**
+      * le
+      * 2019/11/6
+      * 向后向前翻页
+      */
+    handleReturn = (e) => {
          if(this.state.currentPage>0){
-             this.state.currentPage-=1;
-            this.getRes();
+             this.setState({
+                currentPage : this.state.currentPage - 1
+             }, () => {
+                this.getRes();
+             })
         }
     }
     
-    //向后翻页事件
-    handleForward(){
+    handleForward = (e) => {
         if(this.state.currentPage<this.state.allPage-1){
-            this.state.currentPage=this.state.currentPage+1;
-            this.getRes();
+            this.setState({
+                currentPage : this.state.currentPage + 1
+            },()=>{
+                this.getRes();
+            })
         }
     }
     
-    handleFind(){
+    /**
+      * le
+      * 2019/11/6
+      * 封装时间
+      */
+    dataChange(e){
+        return new Date(e).getTime()
+    }  
 
-        const currentPage = this.state.currentPage;
-        //监听最大页的改变
-        document.getElementById("max").onchange = this.maxChange();
-        function dataChange(e){
-            return new Date(e).getTime()
-        }
-        var startDate = document.getElementById("start").value;
-        var endDate = document.getElementById("end").value;
-        if(startDate==""&&endDate==""){
+    /**
+      * le
+      * 2019/11/6
+      * 查询
+      */
+    handleFind = (e) => {
+        let { strc,startTime,endTime,currentPage,max } = this.state;
+        var that = this;
+        if(startTime==""&&endTime==""){
             alert("请输入日期！")
         }else{
             //此处改为5500端口 默认3000端口访问不到
@@ -130,11 +164,11 @@ class List extends React.Component{
                 //存放数据内容
                 const dataArr = data.content;
                 //判断总页数
-                this.state.allPage = Math.ceil(dataArr.length/this.state.max);
+                this.state.allPage = Math.ceil(dataArr.length/max);
                 //显示当前页和总页数
-                document.getElementById("currentPage").innerHTML=currentPage+1;
-                document.getElementById("allPage").innerHTML=this.state.allPage;
-                this.state.strc=`<tr style="background:#D3D3D3">
+                that.refs.current.innerHTML=currentPage+1;
+                that.refs.all.innerHTML=this.state.allPage;
+                that.strc=`<tr style="background:#D3D3D3">
                          <td style="width:190px;">日期</td>
                          <td style="width:150px;">付费人数</td>
                          <td style="width:100px;">免费人数</td>
@@ -154,9 +188,9 @@ class List extends React.Component{
                        </tr>`;
                 dataArr.forEach((item,i)=>{
                 //用时间戳返回毫秒数判断
-                if(dataChange(item.day)<=dataChange(endDate)&&dataChange(item.day)>=dataChange(startDate)&&
-                i>=currentPage*this.state.max && i<(currentPage+1)*this.state.max){
-                this.state.strc+=`<tr style="border:1px solid grey">
+                if(this.dataChange(item.day)<=this.dataChange(endTime)&&this.dataChange(item.day)>=this.dataChange(startTime)&&
+                i>=currentPage*max && i<(currentPage+1)*max){
+                that.strc+=`<tr style="border:1px solid grey">
                           <td style="color:#2399ed">${item.day}</td>
                           <td>${item.payorder}</td>
                           <td>${item.freeorder}</td>
@@ -175,7 +209,7 @@ class List extends React.Component{
                           <td style="color:#2399ed">分析</td>
                        </tr>`; }
                 })
-                document.getElementById('show').innerHTML=this.state.strc  
+                that.refs.show.innerHTML=that.strc  
             })
         }       
     }
@@ -187,20 +221,28 @@ class List extends React.Component{
              <select className="form-control">
                 <option>交易</option>
              </select>
-             <Maxshow/>
+             <select className="form-control" onChange = { this.maxChange }>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option defaultValue="3" value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>  
+             </select>
              日期选择:
-             <input type="date" id="start"/>-<input type="date" id="end"/>
+             <input onChange={ this.onchanges } type="date"/>-<input onChange={this.onchangee} type="date"/>
              <input type="button" value="查询" className="button" onClick={this.handleFind}/>
              <input type="button" value="同步" className="button"/>
              <span className="lasttime">交易上次手动时间:2019-09-27 10:09:23</span>
              </div>
-             <table id="show">
+             <table ref='show'>
              </table>
              <div className="page">
-                <span><a  className="lastpage" onClick={this.handleReturn}>上一页</a></span>
-                <span id="currentPage"></span>/
-                <span id="allPage"></span>
-                <span><a  className="nextpage" onClick={this.handleForward}>下一页</a></span>
+                <span className="lastpage" onClick={this.handleReturn}><a>上一页</a></span>
+                <span ref='current'></span>/
+                <span ref='all'></span>
+                <span className="nextpage" onClick={this.handleForward}><a>下一页</a></span>
              </div>
         </div>
         )

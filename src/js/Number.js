@@ -1,53 +1,29 @@
 import React from 'react';
 
-//屏幕显示组件
-function Sreen(){
-    return(
-        <div className="show">
-             <div className="show-left">
-                 <div></div>
-                 <div></div>
-                 <div></div>
-             </div>
-    
-             <div className="show-right">
-                 <input type="text" className="txt" readOnly={true}/>
-             </div>
-          </div>
-    )
-}
-
-//Loading组件
-function Loading(){
-    return(
-          <div className="loading">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-          </div>
-    )
-}
-
-//主组件
+ /**
+  * le
+  * 2019/11/6
+  * 主组件Number
+  */
 class Number extends React.Component{
     constructor(props){
         super(props);
-        this.handleClick = this.handleClick.bind(this);
         this.state = {
-            res:[]
+            res:[],
+            txt:''
         }
     }
 
-    handleClick(e){
-
+    /**
+     * le
+     * 2019/11/6
+     * 按钮点击事件
+     */
+    handleClick = (e) => {
+        let {res} = this.state;
         var clickValue = e.target.value;
-        var txt = document.getElementsByClassName("txt")[0];
-        var isLoading = document.getElementsByClassName("loading")[0];
+        let txt = this.refs.txt;
+        var isLoading = this.refs.loading;
 
         if(clickValue=="+/-"&&txt.value!=""){
             if(txt.value>0){
@@ -80,8 +56,10 @@ class Number extends React.Component{
              }
          }else{
          if(clickValue!="="){
-             this.state.res[this.state.res.length] = txt.value;
-             this.state.res[this.state.res.length] = clickValue;
+             res[res.length] = txt.value;
+             //存符号
+             res[res.length] = clickValue;
+             //清屏
              txt.value="";
          }else{
              isLoading.style.display="block";
@@ -90,24 +68,33 @@ class Number extends React.Component{
          },1500);
              setTimeout(()=>{
              //loading结束后同时显示结果
-            Math.formatFloat = function(f,digit) { 
-            var m = Math.pow(10,digit); 
-            return parseInt(f*m)/m;
+             Math.formatFloat = function(f,digit) { 
+             var m = Math.pow(10,digit); 
+             return parseInt(f*m)/m;
          }
-             this.state.res[this.state.res.length] = txt.value;
+             res[res.length] = txt.value;
              //eval计算表达式的值;
-             txt.value = Math.formatFloat(eval(this.state.res.join("")),9);
-             this.state.res=[];
+             txt.value = Math.formatFloat(eval(res.join("")),9);
+             res=[];
          },1500)
        } 
       }
+     }
     }
-  }
 
     render(){
         return(
         <div>
-            <Sreen/>
+            <div className="show">
+                <div className="show-left">
+                 <div></div>
+                 <div></div>
+                 <div></div>
+                </div>
+                <div className="show-right">
+                 <input type="text" className="txt" ref="txt" readOnly={true}/>
+                </div>
+            </div>
             <div className="tab">
                <input type="button" value="C" className="btn" onClick={(e)=>this.handleClick(e)}/>
                <input type="button" value="+/-" className="btn" onClick={(e)=>this.handleClick(e)}/>
@@ -129,7 +116,16 @@ class Number extends React.Component{
                <input type="button" value="."  className="btn" onClick={(e)=>this.handleClick(e)}/>
                <input type="button" value="="  className="btn" onClick={(e)=>this.handleClick(e)}/>
             </div>
-            <Loading/>
+            <div className="loading" ref="loading">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+          </div>
         </div>
     )}
 }
